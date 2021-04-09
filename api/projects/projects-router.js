@@ -4,11 +4,25 @@ const router = express.Router();
 
 const Projects = require('./projects-model')
 
+const {validateProjectId} = require('../middleware/middleware')
+
 // [GET] - '/' - Get all projects (array of projects)
 router.get('/', (req, res, next) => {
     Projects.get()
         .then(projects => {
             res.status(200).json(projects);
+        })
+        .catch(err => {
+            next(err);
+        })
+});
+
+// [GET] - '/:id' - get project by id. Returns project
+router.get('/:id', validateProjectId, (req, res, next) => {
+    const {id} = req.params;
+    Projects.get(id)
+        .then(project => {
+            res.status(200).json(project);
         })
         .catch(err => {
             next(err);
