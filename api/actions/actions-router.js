@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const Actions = require('./actions-model');
+const Projects = require('../projects/projects-model')
 
-const {validateActionId} = require('../middleware/middleware')
+const {validateActionId, validateAction} = require('../middleware/middleware')
 
 // [GET] - '/' - Get array of all actions 
 router.get('/', (req, res, next) => {
@@ -20,6 +21,17 @@ router.get('/', (req, res, next) => {
 router.get('/:id', validateActionId, (req, res, next) => {
     const {id} = req.params;
     Actions.get(id)
+        .then(action => {
+            res.status(200).json(action);
+        })
+        .catch(err => {
+            next(err);
+        })
+});
+
+// [POST] - '/' - Create new action, returns newly created action
+router.post('/', validateAction, (req, res, next) => {
+    Actions.insert(req.body)
         .then(action => {
             res.status(200).json(action);
         })
