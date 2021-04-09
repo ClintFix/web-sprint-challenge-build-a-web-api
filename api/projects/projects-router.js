@@ -4,7 +4,7 @@ const router = express.Router();
 
 const Projects = require('./projects-model')
 
-const {validateProjectId} = require('../middleware/middleware')
+const {validateProjectId, validateProject} = require('../middleware/middleware')
 
 // [GET] - '/' - Get all projects (array of projects)
 router.get('/', (req, res, next) => {
@@ -23,6 +23,17 @@ router.get('/:id', validateProjectId, (req, res, next) => {
     Projects.get(id)
         .then(project => {
             res.status(200).json(project);
+        })
+        .catch(err => {
+            next(err);
+        })
+});
+
+// [POST] - '/' - create new project. Returns new project
+router.post('/', validateProject, (req, res, next) => {
+    Projects.insert(req.body)
+        .then(newProject => {
+            res.status(200).json(newProject);
         })
         .catch(err => {
             next(err);
