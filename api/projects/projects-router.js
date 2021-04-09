@@ -50,7 +50,19 @@ router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
         .catch(err => {
             next(err);
         })
-})
+});
+
+// [DELETE] - '/:/id' - Delete existing project. No response.
+router.delete('/:id', validateProjectId, (req, res, next) => {
+    const {id} = req.params;
+    Projects.remove(id)
+        .then(() => {
+            res.status(200).json({message: "Project has been deleted"});
+        })
+        .catch(err => {
+            next(err);
+        })
+});
 
 //Error Middleware
 router.use((err, _, res) => {
