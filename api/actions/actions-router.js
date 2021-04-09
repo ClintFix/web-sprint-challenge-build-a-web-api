@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 const Actions = require('./actions-model');
-const Projects = require('../projects/projects-model')
 
 const {validateActionId, validateAction} = require('../middleware/middleware')
 
@@ -65,11 +64,11 @@ router.delete('/:id', validateActionId, (req, res, next) => {
 });
 
 //Error Middleware
-router.use((err, req, res, next) => {
+router.use((err, _, res) => {
     res.status(500).json({
       message: "There has been an error",
       error: err.message
     });
-  })
+});
 
-  module.exports = router;
+module.exports = router;
