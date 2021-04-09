@@ -14,7 +14,19 @@ router.get('/', (req, res, next) => {
         .catch(err => {
             next(err)
         })
-})
+});
+
+// [GET] - '/:id' - Get an action with a specified ID
+router.get('/:id', validateActionId, (req, res, next) => {
+    const {id} = req.params;
+    Actions.get(id)
+        .then(action => {
+            res.status(200).json(action);
+        })
+        .catch(err => {
+            next(err);
+        })
+});
 
 //Error Middleware
 router.use((err, req, res, next) => {
