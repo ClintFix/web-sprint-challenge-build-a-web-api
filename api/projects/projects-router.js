@@ -29,6 +29,18 @@ router.get('/:id', validateProjectId, (req, res, next) => {
         })
 });
 
+// [GET] - '/:id/actions' - get actions for a particular project
+router.get('/:id/actions', validateProjectId, (req, res, next) => {
+    const {id} = req.params;
+    Projects.getProjectActions(id)
+        .then(actions => {
+            res.status(200).json(actions);
+        })
+        .catch(err => {
+            next(err);
+        })
+});
+
 // [POST] - '/' - create new project. Returns new project
 router.post('/', validateProject, (req, res, next) => {
     Projects.insert(req.body)
