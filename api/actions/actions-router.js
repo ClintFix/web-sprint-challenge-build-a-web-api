@@ -40,12 +40,24 @@ router.post('/', validateAction, (req, res, next) => {
         })
 });
 
-// [PUT] - /:id/ - Update existing action. Returns updated action.
+// [PUT] - '/:id' - Update existing action. Returns updated action.
 router.put('/:id', validateActionId, validateAction, (req, res, next) => {
     const {id} = req.params;
     Actions.update(id, req.body)
         .then(action => {
             res.status(200).json(action);
+        })
+        .catch(err => {
+            next(err);
+        })
+});
+
+// [DELETE] - '/:id' - Delete existing action. No response body
+router.delete('/:id', validateActionId, (req, res, next) => {
+    const {id} = req.params;
+    Actions.remove(id)
+        .then(() => {
+            res.status(200).json({message: 'Action successfully deleted'})
         })
         .catch(err => {
             next(err);
