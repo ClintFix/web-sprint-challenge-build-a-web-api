@@ -40,6 +40,18 @@ router.post('/', validateAction, (req, res, next) => {
         })
 });
 
+// [PUT] - /:id/ - Update existing action. Returns updated action.
+router.put('/:id', validateActionId, validateAction, (req, res, next) => {
+    const {id} = req.params;
+    Actions.update(id, req.body)
+        .then(action => {
+            res.status(200).json(action);
+        })
+        .catch(err => {
+            next(err);
+        })
+});
+
 //Error Middleware
 router.use((err, req, res, next) => {
     res.status(500).json({
