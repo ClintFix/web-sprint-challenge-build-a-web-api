@@ -40,6 +40,18 @@ router.post('/', validateProject, (req, res, next) => {
         })
 });
 
+// [PUT] - '/:id' - Update existing project. Return updated project
+router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
+    const {id} = req.params;
+    Projects.update(id, req.body)
+        .then(updatedProject => {
+            res.status(200).json(updatedProject);
+        })
+        .catch(err => {
+            next(err);
+        })
+})
+
 //Error Middleware
 router.use((err, _, res) => {
     res.status(500).json({
